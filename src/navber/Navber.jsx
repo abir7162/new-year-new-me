@@ -1,19 +1,31 @@
-import { NavLink } from "react-router-dom";
+import { useContext } from "react";
+import logo from '../assets/logo.png'
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../Providers/AuthProvider";
 
 const Navber = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
+  const {user , logOut} = useContext(AuthContext);
+
+  const handleLogOut = () =>{
+    logOut()
+    .then(() => console.log('user logged out successfully'))
+    .catch(error => console.error (error))
+  }
     const navlinks = <>
     <div className='flex gap-2'>
-        <li className="shadow-[#f72e05]	shadow-2xl bg-black text-white"><NavLink to='/'>Home Page</NavLink></li>
-        <li className="shadow-[#f72e05]	shadow-2xl bg-black text-white"><NavLink to='/album'>Gallery page</NavLink></li>
-        <li className="shadow-[#f72e05]	shadow-2xl bg-black text-white"><NavLink to='/trainer'>Trainer Page</NavLink></li>
-        <li className="shadow-[#f72e05]	shadow-2xl bg-black text-white"><NavLink to='/login'>Login</NavLink></li>
-        <li className="shadow-[#f72e05]	shadow-2xl bg-black text-white"><NavLink to='/register'>Register</NavLink></li>
+        <li className=" text-black"><NavLink to='/'>Home Page</NavLink></li>
+        <li className="  text-black"><NavLink to='/album'>Guest page</NavLink></li>
+        <li className="  text-black"><NavLink to='/trainer'>Booking Page</NavLink></li>
+        <li className="  text-black"><NavLink to='/login'>Login</NavLink></li>
+        <li className="  text-black"><NavLink to='/register'>Register</NavLink></li>
         </div>
 
                         </>
     return (
-        <div className="navbar bg-black">
+        <div className="navbar bg-white  mb-4 shadow-sm fixed z-20 w-[1280px] h-24 ">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -23,7 +35,7 @@ const Navber = () => {
             {navlinks}
             </ul>
           </div>
-          <a className="btn btn-ghost text-xl">daisyUI</a>
+          <img className="w-[120px] hidden md:block" src={logo} alt="" />
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
@@ -31,9 +43,29 @@ const Navber = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          <a className="btn">Button</a>
+          {
+           user? <>
+
+
+<a onClick={handleLogOut} className="btn btn-sm rounded-full bg-black text-white shadow-[#f72e05]	shadow-2xl mr-2">Sign Out</a>
+
+              <div className="">
+                                    <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                                        <div className="w-10 rounded-full">
+                                            <img src={user?.photoURL} />
+
+                                        </div>
+                                    </label>
+
+                                </div>
+          
+           </> : <Link to='/login'className="shadow-[#f72e05]	shadow-2xl bg-black text-white btn btn-sm rounded-full">Login</Link>
+          }
+         
         </div>
+        
       </div>
+      
     );
 };
 
